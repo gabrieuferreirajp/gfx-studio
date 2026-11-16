@@ -1,0 +1,145 @@
+{
+  "name": "gfx-studio",
+  "productName": "GFX Studio",
+  "description": "Editor gráfico vetorial offline",
+  "author": "GFX Studio",
+  "private": true,
+  "version": "0.26.0",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "icon": "node scripts/build-icon.mjs",
+    "thumbs": "node scripts/build-thumbnail.mjs",
+    "desktop": "npm run build && electron .",
+    "vendor": "node scripts/vendor-inkscape.mjs && node scripts/vendor-tracedraw.mjs",
+    "installer-art": "node scripts/build-installer-art.mjs",
+    "dist": "npm run icon && npm run installer-art && npm run thumbs && npm run build && electron-builder --win nsis --x64"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "2.6.2",
+    "@types/opentype.js": "1.3.8",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "38.2.0",
+    "electron-builder": "26.0.12",
+    "lucide-react": "^0.468.0",
+    "opentype.js": "1.3.4",
+    "paper": "0.12.18",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.5"
+  },
+  "allowScripts": {
+    "electron@38.2.0": true
+  },
+  "build": {
+    "appId": "com.gfxstudio.app",
+    "productName": "GFX Studio",
+    "copyright": "GFX Studio",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json",
+      "!node_modules/onnxruntime-node/bin/napi-v6/{linux,darwin}/**",
+      "!node_modules/onnxruntime-node/bin/napi-v6/win32/arm64/**"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/onnxruntime-node/**"
+    ],
+    "extraResources": [
+      {
+        "from": "build/thumbs/GfxThumbnail.dll",
+        "to": "thumbs/GfxThumbnail.dll"
+      },
+      {
+        "from": "vendor/inkscape",
+        "to": "inkscape",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "vendor/models",
+        "to": "models",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "vendor/tracedraw",
+        "to": "tracedraw",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "vendor/libredwg",
+        "to": "libredwg",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "artifactName": "GFX-Studio-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "guid": "64d3d0d8-b34d-5ffe-8277-2c1061dbd3a7",
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "GFX Studio",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerSidebar": "build/installerSidebar.bmp",
+      "uninstallerSidebar": "build/uninstallerSidebar.bmp",
+      "installerHeader": "build/installerHeader.bmp",
+      "installerLanguages": [
+        "pt_BR"
+      ],
+      "language": "1046"
+    },
+    "fileAssociations": [
+      {
+        "ext": "gfxs",
+        "name": "Projeto GFX Studio",
+        "description": "Projeto do GFX Studio",
+        "role": "Editor",
+        "icon": "build/icon.ico"
+      },
+      {
+        "ext": "vectorstudio",
+        "name": "Projeto GFX Studio (antigo)",
+        "description": "Projeto do GFX Studio",
+        "role": "Editor",
+        "icon": "build/icon.ico"
+      }
+    ]
+  },
+  "dependencies": {
+    "onnxruntime-node": "1.30.0"
+  }
+}

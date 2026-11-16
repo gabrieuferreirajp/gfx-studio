@@ -1,0 +1,16 @@
+# Dependências e saídas de build
+node_modules/
+dist/
+release/
+*.tsbuildinfo
+build/icon-256.png
+build/thumbs/*.dll
+
+# Ferramentas embutidas (copiadas por npm run vendor; grandes e com licenças próprias)
+vendor/
+
+# Configurações locais
+.claude/
+.DS_Store
+Thumbs.db
+*.log
